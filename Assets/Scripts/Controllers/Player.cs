@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -26,6 +28,11 @@ public class Player : MonoBehaviour
         {
             // Call Spawn Bomb Trail function, passing in bomb spacing and number variables
             SpawnBombTrail(bombTrailSpacing, numberOfTrailBombs);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SpawnBombOnRandomCorner(1f);
         }
     }
 
@@ -56,5 +63,31 @@ public class Player : MonoBehaviour
             // increment the bomb spacing variable for the next iteration, causing the next bomb to be spaced further away
             inBombSpacing += 1;
         }
+    }
+
+    public void SpawnBombOnRandomCorner(float inDistance)
+    {
+        int randomCorner = Random.Range(0, 4);
+
+        Vector2 spawnPos = transform.position;
+
+        if (randomCorner == 0)
+        {
+            spawnPos += new Vector2(-1, 1).normalized * inDistance;
+        } 
+        else if (randomCorner == 1)
+        {
+            spawnPos += new Vector2(1, 1).normalized * inDistance;
+        }
+        else if (randomCorner == 2)
+        {
+            spawnPos += new Vector2(1, -1).normalized * inDistance;
+        }
+        else if (randomCorner == 3)
+        {
+            spawnPos += new Vector2(-1, -1).normalized * inDistance;
+        }
+
+        Instantiate(bombPrefab, spawnPos, Quaternion.identity);
     }
 }
