@@ -9,12 +9,23 @@ public class Player : MonoBehaviour
     public GameObject bombPrefab;
     public List<Transform> asteroidTransforms;
 
+    // Declare and define default values for bomb trail spacing and number of trail bomb public variables
+    public float bombTrailSpacing = 0.5f;
+    public int numberOfTrailBombs = 5;
+
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
             StartCoroutine(BombDelay());
+        }
+
+        // Check if player is pressing down the T key
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            // Call Spawn Bomb Trail function, passing in bomb spacing and number variables
+            SpawnBombTrail(bombTrailSpacing, numberOfTrailBombs);
         }
     }
 
@@ -32,5 +43,18 @@ public class Player : MonoBehaviour
         }
 
         SpawnBombAtOffset(new Vector3(0, 1, 0));
+    }
+
+    // Bomb trail spawn function
+    public void SpawnBombTrail(float inBombSpacing, int inNumberOfBombs)
+    {
+        // For each iteration of the loop where the iteration number is less than the passed in number of bombs
+        for (int i = 0; i < inNumberOfBombs; i++)
+        {
+            // Create an instance of the bomb prefab at the ships transform minus a new Vector3 that uses the spacing variable
+            Instantiate(bombPrefab, transform.position - new Vector3(0, inBombSpacing, 0), Quaternion.identity);
+            // increment the bomb spacing variable for the next iteration, causing the next bomb to be spaced further away
+            inBombSpacing += 1;
+        }
     }
 }
