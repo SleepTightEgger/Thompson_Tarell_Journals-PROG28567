@@ -7,9 +7,9 @@ public class Enemy : MonoBehaviour
     
     private void Update()
     {
-        Debug.Log(NormalizeVector(new Vector2(3, 4)));
-        Debug.Log(NormalizeVector(new Vector2(-3, 2)));
-        Debug.Log(NormalizeVector(new Vector2(1.5f, -3.5f)));
+        //Debug.Log(NormalizeVector(new Vector2(3, 4)));
+        //Debug.Log(NormalizeVector(new Vector2(-3, 2)));
+        //Debug.Log(NormalizeVector(new Vector2(1.5f, -3.5f)));
     }
 
     Vector2 NormalizeVector(Vector2 vec)
