@@ -15,9 +15,9 @@ public class Player : MonoBehaviour
     public float bombTrailSpacing = 0.5f;
     public int numberOfTrailBombs = 5;
 
-
-
     public float ratio;
+
+    public float inMaxRange;
     // Update is called once per frame
     void Update()
     {
@@ -42,6 +42,8 @@ public class Player : MonoBehaviour
         {
             WarpPlayer(enemyTransform, ratio);
         }
+
+        DetectAsteroids(inMaxRange, asteroidTransforms);
     }
 
     void SpawnBombAtOffset(Vector3 inOffset)
@@ -108,5 +110,23 @@ public class Player : MonoBehaviour
         float dist = direction.magnitude;
 
         transform.position += normalized * dist * ratio;
+    }
+
+    public void DetectAsteroids(float inMaxRange, List<Transform> inAsteroids)
+    {
+        // for each iteration where the iteration number is less than the number of asteroid transforms in the list
+        for (int i = 0; i < inAsteroids.Count; i++)
+        {
+            // calculate the direction of the asteroid from the player
+            Vector3 dir = inAsteroids[i].position - transform.position;
+            // normalize the direction for radar purposes
+            Vector3 lineDist = dir.normalized;
+            // if the magnitude of the direction is less than the max range of the rader then...
+            if (dir.magnitude < inMaxRange)
+            {
+                // draw a debug line from the players position to a point thats equal to the normalized direction of the asteroid multiplied by 2.5
+                Debug.DrawLine(transform.position, transform.position + lineDist * 2.5f);
+            }
+        }
     }
 }
