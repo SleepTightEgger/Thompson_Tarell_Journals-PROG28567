@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
                 velocity = Vector3.zero;
             }
         }
-        Debug.Log(dist);
+        //Debug.Log(dist);
         transform.position += velocity * Time.deltaTime;
     }
 }
