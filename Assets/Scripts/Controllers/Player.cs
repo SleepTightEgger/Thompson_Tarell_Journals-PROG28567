@@ -39,7 +39,19 @@ public class Player : MonoBehaviour
             dir = Vector3.down;
         }
 
-        transform.position += dir * Time.deltaTime;
+        if (dir != Vector3.zero)
+        {
+            dir.Normalize();
+            velocity += dir * (maxSpeed / accelerationTime) * Time.deltaTime;
+
+            if (velocity.magnitude > maxSpeed)
+            {
+                velocity = velocity.normalized * maxSpeed;
+            }
+            Debug.Log(velocity);
+        }
+
+        transform.position += velocity * Time.deltaTime;
     }
 
 }
