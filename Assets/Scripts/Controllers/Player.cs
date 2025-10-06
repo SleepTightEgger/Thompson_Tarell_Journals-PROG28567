@@ -48,9 +48,20 @@ public class Player : MonoBehaviour
             {
                 velocity = velocity.normalized * maxSpeed;
             }
-            Debug.Log(velocity);
+            
+        }
+        else
+        {
+            float decel = (maxSpeed / accelerationTime) * Time.deltaTime;
+            velocity -= velocity.normalized * decel;
+
+            if (velocity.magnitude < decel)
+            {
+                velocity = Vector3.zero;
+            }
         }
 
+        Debug.Log(velocity);
         transform.position += velocity * Time.deltaTime;
     }
 
