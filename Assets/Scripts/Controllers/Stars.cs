@@ -18,16 +18,15 @@ public class Stars : MonoBehaviour
     void Update()
     {
         Debug.DrawLine(starTransforms[currentStar].position, lineEnd);
-        Debug.Log(currentStar);
     }
 
     IEnumerator StarTimer()
     {
         t = 0;
+        lineEnd = starTransforms[currentStar].position;
         while (t < drawingTime)
         {
             t += Time.deltaTime;
-            lineEnd = starTransforms[currentStar].position;
             lineEnd = Vector3.Lerp(starTransforms[currentStar].position, starTransforms[currentStar + 1].position, t);
             yield return null;
         }
