@@ -35,7 +35,7 @@ public class Asteroid : MonoBehaviour
         }
         else if (Vector3.Distance(target, transform.position) >= arrivalDistance)
         {
-            Debug.DrawLine(transform.position, target);
+            //Debug.DrawLine(transform.position, target);
             Vector3 targetDir = (target - transform.position).normalized;
             transform.position += moveSpeed * targetDir * Time.deltaTime;
         }
