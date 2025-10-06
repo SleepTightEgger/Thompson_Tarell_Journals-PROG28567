@@ -1,36 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public List<Transform> asteroidTransforms;
     public Transform enemyTransform;
     public GameObject bombPrefab;
-    public List<Transform> asteroidTransforms;
+    public Transform bombsTransform;
 
-    // Update is called once per frame
+    public float maxSpeed = 10f;
+    public float accelerationTime = 2f;
+
+    Vector3 velocity = Vector3.zero;
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
+        PlayerMovement();
+    }
+    public void PlayerMovement()
+    {
+        Vector3 dir = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
-            StartCoroutine(BombDelay());
+            dir = Vector3.left;
         }
+        if (Input.GetKey(KeyCode.RightArrow))
+        { 
+            dir = Vector3.right;
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            dir = Vector3.up;
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            dir = Vector3.down;
+        }
+
+        transform.position += dir * Time.deltaTime;
     }
 
-    void SpawnBombAtOffset(Vector3 inOffset)
-    {
-        Instantiate(bombPrefab, transform.position - inOffset, Quaternion.identity);
-    }
-    IEnumerator BombDelay()
-    {
-        float t = 3;
-        while (t > 0)
-        {
-            t -= Time.deltaTime;
-            yield return null;
-        }
-
-        SpawnBombAtOffset(new Vector3(0, 1, 0));
-    }
 }
