@@ -12,11 +12,16 @@ public class Player : MonoBehaviour
     public float maxSpeed = 10f;
     public float accelerationTime = 2f;
 
+    public float radarRadius = 2f;
+    public int radarPoints = 5;
+    List<Vector2> angleVectors = new List<Vector2>();
+
     Vector3 velocity = Vector3.zero;
 
     void Update()
     {
         PlayerMovement();
+        EnemyRadar(radarRadius, radarPoints);
     }
     public void PlayerMovement()
     {
@@ -65,4 +70,25 @@ public class Player : MonoBehaviour
         transform.position += velocity * Time.deltaTime;
     }
 
+    public void EnemyRadar(float radius, int circlePoints)
+    {
+        angleVectors.Clear();
+        Color radarColor = Color.green;
+        if (Vector2.Distance(enemyTransform.position, transform.position) < radius)
+        {
+            radarColor = Color.red;
+        }
+            for (int i = 0; i < circlePoints; i++)
+            {
+                float angle = (360 / circlePoints) * i;
+                float angleCos = Mathf.Cos(angle * Mathf.Deg2Rad);
+                float angleSin = Mathf.Sin(angle * Mathf.Deg2Rad);
+                Vector2 angleVector = new Vector2(angleCos, angleSin) * radius;
+                angleVectors.Add(angleVector);
+            }
+        for (int i = 0;i < angleVectors.Count; i++)
+        {
+            Debug.DrawLine((Vector2)transform.position + angleVectors[i], (Vector2)transform.position + angleVectors[(i + 1) % angleVectors.Count], radarColor);
+        }
+    }
 }
