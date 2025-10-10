@@ -8,13 +8,17 @@ public class Player : MonoBehaviour
     public Transform enemyTransform;
     public GameObject bombPrefab;
     public Transform bombsTransform;
+    public GameObject powerupPrefab;
 
     public float maxSpeed = 10f;
     public float accelerationTime = 2f;
 
     public float radarRadius = 2f;
     public int radarPoints = 5;
-    List<Vector2> angleVectors = new List<Vector2>();
+    public float powerupRadius = 3f;
+    public int powerupPoints = 5;
+    List<Vector2> radarVectors = new List<Vector2>();
+    List<Vector2> powerupVectors = new List<Vector2>();
 
     Vector3 velocity = Vector3.zero;
 
@@ -22,6 +26,7 @@ public class Player : MonoBehaviour
     {
         PlayerMovement();
         EnemyRadar(radarRadius, radarPoints);
+        SpawnPowerups(powerupRadius, powerupPoints);
     }
     public void PlayerMovement()
     {
@@ -72,23 +77,40 @@ public class Player : MonoBehaviour
 
     public void EnemyRadar(float radius, int circlePoints)
     {
-        angleVectors.Clear();
         Color radarColor = Color.green;
         if (Vector2.Distance(enemyTransform.position, transform.position) < radius)
         {
             radarColor = Color.red;
         }
-            for (int i = 0; i < circlePoints; i++)
-            {
-                float angle = (360 / circlePoints) * i;
-                float angleCos = Mathf.Cos(angle * Mathf.Deg2Rad);
-                float angleSin = Mathf.Sin(angle * Mathf.Deg2Rad);
-                Vector2 angleVector = new Vector2(angleCos, angleSin) * radius;
-                angleVectors.Add(angleVector);
-            }
-        for (int i = 0;i < angleVectors.Count; i++)
+        DetermineAngleVectors(radarVectors, radius, circlePoints);
+        for (int i = 0;i < radarVectors.Count; i++)
         {
-            Debug.DrawLine((Vector2)transform.position + angleVectors[i], (Vector2)transform.position + angleVectors[(i + 1) % angleVectors.Count], radarColor);
+            Debug.DrawLine((Vector2)transform.position + radarVectors[i], (Vector2)transform.position + radarVectors[(i + 1) % radarVectors.Count], radarColor);
+        }
+    }
+
+    public void SpawnPowerups(float radius, int numberOfPowerups)
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            DetermineAngleVectors(powerupVectors, radius, numberOfPowerups);
+            for (int i = 0; i < numberOfPowerups; i++)
+            {
+                Instantiate(powerupPrefab, (Vector2)transform.position + powerupVectors[i], Quaternion.identity);
+            }
+        }
+    }
+
+    public void DetermineAngleVectors(List<Vector2> vectors, float radius, int numberOfPoints)
+    {
+        vectors.Clear();
+        for(int i = 0; i<numberOfPoints; i++)
+        {
+            float angle = (360/ numberOfPoints) * i;
+            float angleCos = Mathf.Cos(angle * Mathf.Deg2Rad);
+            float angleSin = Mathf.Sin(angle * Mathf.Deg2Rad);
+            Vector2 angleVector = new Vector2(angleCos, angleSin) * radius;
+            vectors.Add(angleVector);
         }
     }
 }
