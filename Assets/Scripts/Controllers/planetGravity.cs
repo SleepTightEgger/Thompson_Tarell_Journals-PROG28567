@@ -8,22 +8,21 @@ public class planetGravity : MonoBehaviour
     public GameObject playerObject;
 
     public float accelerationTime = 1.0f;
-    public float gravitySpeed = 20f;
-    public float gravityRadius = 2f;
-
-    Vector3 objectVelocity = Vector3.zero;
+    public float gravitySpeed = 15f;
+    public float gravityRadius = 3f;
 
     List<Vector2> radiusVectors = new List<Vector2>();
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        objectVelocity = playerObject.GetComponent<Player>().velocity;
-    }
+
 
     // Update is called once per frame
     void Update()
     {
-        GravitationalPull(player, 5);
+        gravityRadius = transform.localScale.x;
+        gravitySpeed = transform.localScale.x * 3;
+        if (player != null &&  playerObject != null)
+        {
+            GravitationalPull(player, gravityRadius);
+        }
         DrawRadius(gravityRadius);
     }
 
@@ -31,23 +30,25 @@ public class planetGravity : MonoBehaviour
     {
         if (Vector2.Distance(playerTransform.position, transform.position) < radius)
         {
-            Vector3 dir = playerTransform.position - transform.position;
+            Vector3 dir = transform.position - playerTransform.position;
             float dist = dir.magnitude;
             if (dist < radius)
             {
                 dir.Normalize();
-                objectVelocity += dir * (gravitySpeed / accelerationTime) * Time.deltaTime;
+                player.GetComponent<Player>().velocity += dir * (gravitySpeed / accelerationTime) * Time.deltaTime;
             }
-            objectVelocity -= objectVelocity * Time.deltaTime;
         }
     }
 
     public void DrawRadius(float radius)
     {
         Color color = Color.white;
-        if (Vector2.Distance(player.position, transform.position) < radius)
+        if (player != null && playerObject != null)
         {
-            color = Color.green;
+            if (Vector2.Distance(player.position, transform.position) < radius)
+            {
+                color = Color.green;
+            }
         }
         radiusVectors.Clear();
         for (int i = 0; i < 8;  i++)
