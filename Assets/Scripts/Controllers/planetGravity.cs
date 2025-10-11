@@ -5,6 +5,7 @@ using UnityEngine;
 public class planetGravity : MonoBehaviour
 {
     public Transform player;
+    public GameObject playerObject;
 
     public float accelerationTime = 1.0f;
     public float gravitySpeed = 20f;
@@ -16,7 +17,7 @@ public class planetGravity : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        objectVelocity = playerObject.GetComponent<Player>().velocity;
     }
 
     // Update is called once per frame
@@ -32,10 +33,12 @@ public class planetGravity : MonoBehaviour
         {
             Vector3 dir = playerTransform.position - transform.position;
             float dist = dir.magnitude;
-            dir.Normalize();
-            objectVelocity += dir * (gravitySpeed / accelerationTime) * Time.deltaTime;
-
-            playerTransform.position = objectVelocity * Time.deltaTime;
+            if (dist < radius)
+            {
+                dir.Normalize();
+                objectVelocity += dir * (gravitySpeed / accelerationTime) * Time.deltaTime;
+            }
+            objectVelocity -= objectVelocity * Time.deltaTime;
         }
     }
 

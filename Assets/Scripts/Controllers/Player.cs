@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     List<Vector2> radarVectors = new List<Vector2>();
     List<Vector2> powerupVectors = new List<Vector2>();
 
-    Vector3 velocity = Vector3.zero;
+    public Vector3 velocity = Vector3.zero;
 
     void Update()
     {
