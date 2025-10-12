@@ -71,7 +71,7 @@ public class Enemy : MonoBehaviour
 
     public void SpawnMissile(Transform targetTransform)
     {
-        GameObject missile = Instantiate(missilePrefab, transform.position + transform.up, Quaternion.identity);
+        GameObject missile = Instantiate(missilePrefab, transform.position + transform.up, transform.rotation);
         missile.GetComponent<HomingMissile>().target = target;
         missile.GetComponent<HomingMissile>().velocity = transform.up * 5;
     }

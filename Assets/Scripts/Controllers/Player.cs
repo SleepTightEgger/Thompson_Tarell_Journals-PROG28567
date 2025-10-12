@@ -135,7 +135,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            GameObject missile = Instantiate(missilePrefab, transform.position + transform.up, Quaternion.identity);
+            GameObject missile = Instantiate(missilePrefab, transform.position + transform.up, transform.rotation);
             missile.GetComponent<HomingMissile>().target = enemyTransform;
             missile.GetComponent<HomingMissile>().velocity = transform.up * 5;
         }
