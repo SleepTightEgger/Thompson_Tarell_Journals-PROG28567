@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public GameObject bombPrefab;
     public Transform bombsTransform;
     public GameObject powerupPrefab;
+    public GameObject missilePrefab;
 
     public float maxSpeed = 10f;
     public float accelerationTime = 2f;
