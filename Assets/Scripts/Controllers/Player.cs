@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
         PlayerMovement();
         EnemyRadar(radarRadius, radarPoints);
         SpawnPowerups(powerupRadius, powerupPoints);
+        SpawnMissile();
     }
     public void PlayerMovement()
     {
@@ -112,6 +113,16 @@ public class Player : MonoBehaviour
             float angleSin = Mathf.Sin(angle * Mathf.Deg2Rad);
             Vector2 angleVector = new Vector2(angleCos, angleSin) * radius;
             vectors.Add(angleVector);
+        }
+    }
+
+    public void SpawnMissile()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            GameObject missile = Instantiate(missilePrefab, transform.position + transform.up, Quaternion.identity);
+            missile.GetComponent<HomingMissile>().target = enemyTransform;
+            missile.GetComponent<HomingMissile>().velocity = transform.up * 5;
         }
     }
 }

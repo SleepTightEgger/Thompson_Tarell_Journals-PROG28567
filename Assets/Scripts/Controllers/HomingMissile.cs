@@ -4,6 +4,11 @@ public class HomingMissile : MonoBehaviour
 {
     public Transform target;
     public float angluarSpeed = 180f;
+
+    public float maxSpeed = 10f;
+    public float accelerationTime = 1f;
+    
+    public Vector3 velocity = Vector3.zero;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -13,10 +18,11 @@ public class HomingMissile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        MissileRotation(target);
         MissileMovement(target);
     }
 
-    public void MissileMovement(Transform targetTransform)
+    public void MissileRotation(Transform targetTransform)
     {
         Vector3 directionToTarget = (targetTransform.position - transform.position).normalized;
 
@@ -26,9 +32,30 @@ public class HomingMissile : MonoBehaviour
         float deltaAngle = Mathf.DeltaAngle(upAngle, directionAngle);
         float sign = Mathf.Sign(deltaAngle);
 
+        if (Mathf.Abs(deltaAngle) < 0.1f) return;
+
         transform.Rotate(new Vector3(0, 0, angluarSpeed * Time.deltaTime * sign));
 
         Debug.DrawLine(transform.position, transform.position + transform.up, Color.green);
         Debug.DrawLine(transform.position, transform.position + directionToTarget, Color.red);
+    }
+
+    public void MissileMovement(Transform targetTransform)
+    {
+        Vector3 dir = (target.position - transform.position).normalized;
+        float dist = dir.magnitude;
+
+        if (dist > 0 && dir != Vector3.zero)
+        {
+            dir.Normalize();
+            velocity += dir * (maxSpeed / accelerationTime) * Time.deltaTime;
+
+            if (velocity.magnitude > maxSpeed)
+            {
+                velocity = velocity.normalized * maxSpeed;
+            }
+        }
+
+        transform.position += velocity * Time.deltaTime;
     }
 }
