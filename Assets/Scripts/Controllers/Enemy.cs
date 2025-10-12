@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         EnemyMovement();
+        EnemyRotation();
     }
 
     public void EnemyMovement()
@@ -51,6 +52,21 @@ public class Enemy : MonoBehaviour
         }
         //Debug.Log(dist);
         transform.position += velocity * Time.deltaTime;
+    }
+
+    public void EnemyRotation()
+    {
+        Vector3 directionToTarget = (target.position - transform.position).normalized;
+
+        float directionAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg;
+        float upAngle = Mathf.Atan2(transform.up.y, transform.up.x) * Mathf.Rad2Deg;
+
+        float deltaAngle = Mathf.DeltaAngle(upAngle, directionAngle);
+        float sign = Mathf.Sign(deltaAngle);
+
+        if (Mathf.Abs(deltaAngle) < 0.1f) return;
+
+        transform.Rotate(new Vector3(0, 0, 90 * Time.deltaTime * sign));
     }
 
     public void SpawnMissile(Transform targetTransform)

@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     List<Vector2> powerupVectors = new List<Vector2>();
 
     public Vector3 velocity = Vector3.zero;
+    float sign;
 
     void Update()
     {
@@ -30,24 +31,38 @@ public class Player : MonoBehaviour
         SpawnPowerups(powerupRadius, powerupPoints);
         SpawnMissile();
     }
+
+    public float AngleSign(Vector3 vector)
+    {
+        Vector3 dta = (transform.position + vector.normalized) - transform.position;
+        float dA = Mathf.Atan2(dta.y, dta.x) * Mathf.Rad2Deg;
+        float upAngle = Mathf.Atan2(transform.up.y, transform.up.x) * Mathf.Rad2Deg;
+        float deltaA = Mathf.DeltaAngle(upAngle, dA);
+        return Mathf.Sign(deltaA);
+    }
     public void PlayerMovement()
     {
         Vector3 dir = Vector3.zero;
+        sign = 0;
 
         if (Input.GetKey(KeyCode.LeftArrow))
         {
+            sign = AngleSign(Vector3.left);
             dir = Vector3.left;
         }
         if (Input.GetKey(KeyCode.RightArrow))
-        { 
+        {
+            sign = AngleSign(Vector3.right);
             dir = Vector3.right;
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
+            sign = AngleSign(Vector3.up);
             dir = Vector3.up;
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
+            sign = AngleSign(Vector3.down);
             dir = Vector3.down;
         }
 
@@ -73,7 +88,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        //Debug.Log(velocity);
+        transform.Rotate(new Vector3(0, 0, 90f * Time.deltaTime * sign));
         transform.position += velocity * Time.deltaTime;
     }
 
