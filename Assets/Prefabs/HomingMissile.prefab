@@ -46,6 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  angluarSpeed: 180
+  maxSpeed: 10
+  accelerationTime: 1
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!1 &1819074805867038
 GameObject:
   m_ObjectHideFlags: 0

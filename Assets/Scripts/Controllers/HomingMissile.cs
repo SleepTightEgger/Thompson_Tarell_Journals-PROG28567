@@ -42,12 +42,13 @@ public class HomingMissile : MonoBehaviour
 
     public void MissileMovement(Transform targetTransform)
     {
-        Vector3 dir = (target.position - transform.position).normalized;
+        Vector3 dir = (target.position - transform.position);
         float dist = dir.magnitude;
 
-        if (dist > 0 && dir != Vector3.zero)
+        if (dist > 0.3 && dir != Vector3.zero)
         {
             dir.Normalize();
+            velocity += transform.up.normalized * maxSpeed;
             velocity += dir * (maxSpeed / accelerationTime) * Time.deltaTime;
 
             if (velocity.magnitude > maxSpeed)
@@ -55,7 +56,10 @@ public class HomingMissile : MonoBehaviour
                 velocity = velocity.normalized * maxSpeed;
             }
         }
-
+        else
+        {
+            Destroy(gameObject);
+        }
         transform.position += velocity * Time.deltaTime;
     }
 }

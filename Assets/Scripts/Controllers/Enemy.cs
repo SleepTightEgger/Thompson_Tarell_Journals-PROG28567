@@ -6,8 +6,16 @@ public class Enemy : MonoBehaviour
     public float maxSpeed = 10f;
     public float accelerationTime = 2f;
     public Transform target;
+    public GameObject missilePrefab;
 
     Vector3 velocity = Vector3.zero;
+
+    float t;
+
+    public void Start()
+    {
+        StartCoroutine(RandomMissileTimer(Random.Range(0.2f, 2f)));
+    }
 
     private void Update()
     {
@@ -43,5 +51,24 @@ public class Enemy : MonoBehaviour
         }
         //Debug.Log(dist);
         transform.position += velocity * Time.deltaTime;
+    }
+
+    public void SpawnMissile(Transform targetTransform)
+    {
+        GameObject missile = Instantiate(missilePrefab, transform.position + transform.up, Quaternion.identity);
+        missile.GetComponent<HomingMissile>().target = target;
+        missile.GetComponent<HomingMissile>().velocity = transform.up * 5;
+    }
+
+    IEnumerator RandomMissileTimer(float timer)
+    {
+        t = timer;
+        while (t > 0)
+        {
+            t -= Time.deltaTime;
+            yield return null;
+        }
+        SpawnMissile(target);
+        StartCoroutine(RandomMissileTimer(Random.Range(1f, 5f)));
     }
 }
